@@ -28,30 +28,36 @@ class Path {
   }
 
   position(step) {
-    if (this.points.length == 0) {
+    if (this.points.length === 0 || this.points.length === 1) {
       return { x: 0, y: 0 };
     }
 
-    if (this.points.length == 1) {
-      return { x: 0, y: 0 };
-    }
-
+    // Adjust for the scale of step being between 0 and N
     let numSegments = this.points.length - 1;
-    let segmentIndex = Math.floor(step * numSegments);
-    if (step === 1) {
+    let segmentIndex = Math.floor(step); // Direct mapping of step to index
+
+    // Special case handling when step is exactly at the last point
+    if (segmentIndex >= numSegments) {
       return {
         x: this.points[this.points.length - 1].x,
         y: this.points[this.points.length - 1].y,
       };
     }
-    let localStep = step * numSegments - segmentIndex;
+
+    // Calculate the local step for interpolation within the current segment
+    let localStep = step - segmentIndex;
     let startPoint = this.points[segmentIndex];
     let endPoint = this.points[segmentIndex + 1];
     let deltaX = endPoint.x - startPoint.x;
     let deltaY = endPoint.y - startPoint.y;
+
     return {
       x: startPoint.x + deltaX * localStep,
       y: startPoint.y + deltaY * localStep,
     };
+  }
+
+  lastPosition() {
+    return this.points.length - 1;
   }
 }

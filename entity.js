@@ -6,9 +6,14 @@ class Entity {
     this.stage = stage;
     this.stage.addChild(this.circle);
     this.path = new Path(stage);
-    this.ticker = new IntervalTicker(0.5);
-    this.selected = false;
 
+    this.frequency = 0.3;
+    this.smoothness = 0.0125;
+    this.speed = 1;
+
+    this.ticker = new IntervalTicker(this.frequency);
+    this.movement = new IntervalTicker(this.smoothness);
+    this.selected = false;
     this.init();
   }
 
@@ -19,11 +24,26 @@ class Entity {
       }
     });
 
+    this.movement.add((ticker) => {
+      this.movement_accum += (this.smoothness / this.frequency) * this.speed;
+      this.circle.x = this.path.position(this.movement_accum).x;
+      this.circle.y = this.path.position(this.movement_accum).y;
+      if (this.movement_accum > this.path.lastPosition()) {
+        ticker.stop();
+      }
+    });
+
     this.circle.on("pointerdown", () => {
       this.selected = true;
       this.circle.lineStyle(20, 0x0000ff, 20);
       this.ticker.start();
     });
+
+    this.circle.on("rightclick", () => {
+      this.movement_accum = 0;
+      this.movement.start();
+    });
+
     ["pointerup", "pointerupoutside"].forEach((event_type) => {
       this.circle.on(event_type, () => {
         this.selected = false;

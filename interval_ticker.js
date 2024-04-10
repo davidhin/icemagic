@@ -9,7 +9,7 @@ class IntervalTicker {
     this.ticker.add((ticker) => {
       this.accumulator += ticker.deltaTime;
       if (this.accumulator >= this.interval) {
-        callback();
+        callback(ticker);
         this.accumulator = 0;
       }
     });
