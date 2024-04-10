@@ -78,13 +78,37 @@ class Path {
     let localStep = step - segmentIndex;
     let startPoint = this.points[segmentIndex];
     let endPoint = this.points[segmentIndex + 1];
-    let deltaX = endPoint.x - startPoint.x;
-    let deltaY = endPoint.y - startPoint.y;
 
-    return {
-      x: startPoint.x + deltaX * localStep,
-      y: startPoint.y + deltaY * localStep,
-    };
+    // Calculate the position along the Bezier curve
+    let t = localStep; // Assuming localStep is normalized between 0 and 1 for Bezier curves
+    let p0 = segmentIndex > 0 ? this.points[segmentIndex - 1] : this.points[0];
+    let p1 = startPoint;
+    let p2 = endPoint;
+    let p3 =
+      segmentIndex !== this.points.length - 2
+        ? this.points[segmentIndex + 2]
+        : p2;
+
+    // Calculate control points for a smoother transition
+    let cp1x = p1.x + (p2.x - p0.x) / 6;
+    let cp1y = p1.y + (p2.y - p0.y) / 6;
+
+    let cp2x = p2.x - (p3.x - p1.x) / 6;
+    let cp2y = p2.y - (p3.y - p1.y) / 6;
+
+    // Calculate the position on the Bezier curve using the calculated control points
+    let px =
+      (1 - t) ** 3 * p1.x +
+      3 * (1 - t) ** 2 * t * cp1x +
+      3 * (1 - t) * t ** 2 * cp2x +
+      t ** 3 * p2.x;
+    let py =
+      (1 - t) ** 3 * p1.y +
+      3 * (1 - t) ** 2 * t * cp1y +
+      3 * (1 - t) * t ** 2 * cp2y +
+      t ** 3 * p2.y;
+
+    return { x: px, y: py };
   }
 
   lastPosition() {

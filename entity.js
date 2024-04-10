@@ -7,7 +7,7 @@ class Entity {
     this.stage.addChild(this.circle);
     this.path = new Path(stage);
 
-    this.frequency = 0.3;
+    this.frequency = 0.5;
     this.smoothness = 0.0125;
     this.speed = 1;
 
@@ -35,7 +35,6 @@ class Entity {
 
     this.circle.on("pointerdown", () => {
       this.selected = true;
-      this.circle.lineStyle(20, 0x0000ff, 20);
       this.ticker.start();
     });
 
