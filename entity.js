@@ -12,7 +12,7 @@ class PathPoint {
 
 class Entity {
   constructor(x, y, stage) {
-    this.circle = new PIXI.Graphics().circle(0, 0, 50).fill("black");
+    this.circle = new PIXI.Graphics().circle(0, 0, 50).fill(0x454545);
     this.circle.x = x;
     this.circle.y = y;
     this.circle.roundPixels = true;
@@ -41,39 +41,18 @@ class Entity {
     this.pathLine.endFill();
   }
 
-  distance(x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-  }
-
   init() {
     this.ticker.start();
 
     this.accumulator = 0.0;
     this.ticker.add((ticker) => {
       this.accumulator += ticker.deltaTime;
-      if (this.accumulator >= 1) {
+      if (this.accumulator >= 15) {
         if (this.selected == true) {
-          if (this.path.length > 0) {
-            let distanceFromLast = this.distance(
-              this.path[this.path.length - 1].x,
-              this.path[this.path.length - 1].y,
-              this.circle.x,
-              this.circle.y
-            );
-            if (distanceFromLast > 50) {
-              this.path.push(
-                new PathPoint(this.circle.x, this.circle.y, this.stage)
-              );
-              console.log(this.path);
-              this.drawPath();
-            }
-          } else {
-            this.path.push(
-              new PathPoint(this.circle.x, this.circle.y, this.stage)
-            );
-            console.log(this.path);
-            this.drawPath();
-          }
+          this.path.push(
+            new PathPoint(this.circle.x, this.circle.y, this.stage)
+          );
+          this.drawPath();
         }
         this.accumulator = 0;
       }
@@ -82,7 +61,6 @@ class Entity {
     this.circle.on("pointerdown", () => {
       this.selected = true;
       this.circle.lineStyle(20, 0x0000ff, 20);
-      console.log(this.path);
     });
     ["pointerup", "pointerupoutside"].forEach((event_type) => {
       this.circle.on(event_type, () => {
