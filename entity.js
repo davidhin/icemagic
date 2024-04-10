@@ -28,17 +28,42 @@ class Path {
   }
 }
 
+class IntervalTicker {
+  constructor(seconds) {
+    this.ticker = new PIXI.Ticker();
+    this.interval = 60 * seconds;
+    this.accumulator = 0;
+  }
+
+  add(callback) {
+    this.ticker.add((ticker) => {
+      this.accumulator += ticker.deltaTime;
+      if (this.accumulator >= this.interval) {
+        callback();
+        this.accumulator = 0;
+      }
+    });
+  }
+
+  start = () => {
+    this.ticker.start();
+  };
+
+  stop = () => {
+    this.ticker.stop();
+  };
+}
+
 class Entity {
   constructor(x, y, stage) {
     this.circle = new PIXI.Graphics().circle(0, 0, 25).fill(0x454545);
     this.circle.x = x;
     this.circle.y = y;
-    this.circle.roundPixels = true;
     this.stage = stage;
     this.stage.addChild(this.circle);
     this.path = new Path(stage);
+    this.ticker = new IntervalTicker(0.25);
     this.selected = false;
-    this.ticker = new PIXI.Ticker();
 
     this.init();
 
@@ -47,14 +72,9 @@ class Entity {
   }
 
   init() {
-    this.accumulator = 0.0;
-    this.ticker.add((ticker) => {
-      this.accumulator += ticker.deltaTime;
-      if (this.accumulator >= 15) {
-        if (this.selected == true) {
-          this.path.addPoint(this.circle.x, this.circle.y);
-        }
-        this.accumulator = 0;
+    this.ticker.add(() => {
+      if (this.selected == true) {
+        this.path.addPoint(this.circle.x, this.circle.y);
       }
     });
 
