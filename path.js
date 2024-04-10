@@ -3,7 +3,9 @@ class Path {
     this.stage = stage;
     this.points = [];
     this.line = new PIXI.Graphics();
+    this.curve = new PIXI.Graphics();
     this.stage.addChild(this.line);
+    this.stage.addChild(this.curve);
   }
 
   addPoint(x, y) {
@@ -13,18 +15,46 @@ class Path {
     this.points.push(point);
     this.stage.addChild(point);
     this.drawLine();
+    this.drawCurve();
   }
 
   drawLine() {
     this.line.clear();
     this.line.moveTo(this.points[0].x, this.points[0].y);
     this.points.forEach((point) => {
-      this.line
-        .lineStyle(5, 0x733935, 1)
-        .lineTo(point.x, point.y)
-        .moveTo(point.x, point.y);
+      this.line.lineTo(point.x, point.y).moveTo(point.x, point.y);
     });
-    this.line.endFill();
+    this.line.stroke({ color: "#ff0000" });
+  }
+
+  drawCurve() {
+    if (this.points.length < 3) {
+      // Not enough points for a smooth curve; draw straight lines instead
+      this.drawLine(); // Assuming drawLine is adapted for simple line drawing
+      return;
+    }
+
+    this.curve.clear();
+    this.curve.lineStyle(5, 0x733935, 1);
+    this.curve.moveTo(this.points[0].x, this.points[0].y);
+
+    for (let i = 0; i < this.points.length - 1; i++) {
+      const p0 = i > 0 ? this.points[i - 1] : this.points[0];
+      const p1 = this.points[i];
+      const p2 = this.points[i + 1];
+      const p3 = i !== this.points.length - 2 ? this.points[i + 2] : p2;
+
+      // Calculate control points for a smoother transition
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+      // Draw the Bézier curve using the calculated control points
+      this.curve.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+    }
+    this.curve.stroke({ color: "#ffffff" });
   }
 
   position(step) {
