@@ -2,9 +2,7 @@ class Path {
   constructor(stage) {
     this.stage = stage;
     this.points = [];
-    this.line = new PIXI.Graphics();
     this.curve = new PIXI.Graphics();
-    this.stage.addChild(this.line);
     this.stage.addChild(this.curve);
   }
 
@@ -14,28 +12,11 @@ class Path {
     point.y = y;
     this.points.push(point);
     this.stage.addChild(point);
-    this.drawLine();
     this.drawCurve();
   }
 
-  drawLine() {
-    this.line.clear();
-    this.line.moveTo(this.points[0].x, this.points[0].y);
-    this.points.forEach((point) => {
-      this.line.lineTo(point.x, point.y).moveTo(point.x, point.y);
-    });
-    this.line.stroke({ color: "#ff0000" });
-  }
-
   drawCurve() {
-    if (this.points.length < 3) {
-      // Not enough points for a smooth curve; draw straight lines instead
-      this.drawLine(); // Assuming drawLine is adapted for simple line drawing
-      return;
-    }
-
     this.curve.clear();
-    this.curve.lineStyle(5, 0x733935, 1);
     this.curve.moveTo(this.points[0].x, this.points[0].y);
 
     for (let i = 0; i < this.points.length - 1; i++) {

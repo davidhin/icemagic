@@ -9,7 +9,7 @@ class Entity {
 
     this.frequency = 0.5;
     this.smoothness = 0.0125;
-    this.speed = 1;
+    this.speed = 0.5;
 
     this.ticker = new IntervalTicker(this.frequency);
     this.movement = new IntervalTicker(this.smoothness);
