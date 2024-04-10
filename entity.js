@@ -6,13 +6,10 @@ class Entity {
     this.stage = stage;
     this.stage.addChild(this.circle);
     this.path = new Path(stage);
-    this.ticker = new IntervalTicker(0.25);
+    this.ticker = new IntervalTicker(0.5);
     this.selected = false;
 
     this.init();
-
-    this.pathLine = new PIXI.Graphics();
-    this.stage.addChild(this.pathLine);
   }
 
   init() {

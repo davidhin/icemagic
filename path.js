@@ -26,4 +26,32 @@ class Path {
     });
     this.line.endFill();
   }
+
+  position(step) {
+    if (this.points.length == 0) {
+      return { x: 0, y: 0 };
+    }
+
+    if (this.points.length == 1) {
+      return { x: 0, y: 0 };
+    }
+
+    let numSegments = this.points.length - 1;
+    let segmentIndex = Math.floor(step * numSegments);
+    if (step === 1) {
+      return {
+        x: this.points[this.points.length - 1].x,
+        y: this.points[this.points.length - 1].y,
+      };
+    }
+    let localStep = step * numSegments - segmentIndex;
+    let startPoint = this.points[segmentIndex];
+    let endPoint = this.points[segmentIndex + 1];
+    let deltaX = endPoint.x - startPoint.x;
+    let deltaY = endPoint.y - startPoint.y;
+    return {
+      x: startPoint.x + deltaX * localStep,
+      y: startPoint.y + deltaY * localStep,
+    };
+  }
 }
