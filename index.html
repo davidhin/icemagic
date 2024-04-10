@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://pixijs.download/release/pixi.min.js"></script>
+    <script src="entity.js"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      const app = new PIXI.Application();
+      await app.init({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        backgroundColor: 0xbababa,
+        antialias: true,
+      });
+      document.body.appendChild(app.canvas);
+
+      new Entity(100, 100, app.stage);
+      new Entity(100, 200, app.stage);
+
+      // Add a ticker callback to move the sprite back and forth
+      let elapsed = 0.0;
+      app.ticker.add((ticker) => {
+        elapsed += ticker.deltaTime;
+      });
+    </script>
+  </body>
+</html>
