@@ -2,7 +2,6 @@ class IceMagic {
   constructor(app) {
     this.stage = app.stage;
     this.stage.hitArea = app.screen;
-    this.eventManager = new EventManager();
 
     // UI Element Settings
     this.stageHeight = app.screen.height;
@@ -17,18 +16,15 @@ class IceMagic {
 
     this.movement = new IntervalTicker(this.smoothness);
 
-    this.entities = [];
-    this.entities.push(
-      new Entity(100, 100, this.stage, this.frequency, this.eventManager)
-    );
-    this.entities.push(
-      new Entity(100, 200, this.stage, this.frequency, this.eventManager)
-    );
-    this.entities.push(
-      new Entity(100, 300, this.stage, this.frequency, this.eventManager)
-    );
-
+    // Initialize eventManager
+    this.eventManager = new EventManager();
     this.eventManager.subscribe("increment", this.updatePathPoints.bind(this));
+
+    // Initialize entities
+    this.entities = [];
+    this.entities.push(this.createEntity(100, 100));
+    this.entities.push(this.createEntity(100, 200));
+    this.entities.push(this.createEntity(100, 300));
 
     this.init();
   }
@@ -67,6 +63,10 @@ class IceMagic {
       this.movement.start();
     });
     this.stage.addChild(this.startButton);
+  }
+
+  createEntity(x, y) {
+    return new Entity(x, y, this.stage, this.frequency, this.eventManager);
   }
 
   moveEntities(t) {
