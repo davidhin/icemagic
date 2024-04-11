@@ -8,21 +8,26 @@ class IceMagic {
 
     this.movement = new IntervalTicker(this.smoothness);
 
+    this.entities = [];
+    this.entities.push(new Entity(100, 100, this.stage, this.frequency));
+    this.entities.push(new Entity(100, 200, this.stage, this.frequency));
+    this.entities.push(new Entity(100, 300, this.stage, this.frequency));
+
     this.init();
   }
 
   init() {
-    let e1 = new Entity(100, 100, this.stage, this.frequency);
-    let e2 = new Entity(100, 200, this.stage, this.frequency);
-    let e3 = new Entity(100, 300, this.stage, this.frequency);
-
-    this.movement.add((ticker) => {
+    this.movement.add(() => {
+      console.log("moving...");
       this.movement_accum += (this.smoothness / this.frequency) * this.speed;
-      if (!e1.atEnd()) {
-        e1.pathPosition(this.movement_accum);
-      }
-      if (!e2.atEnd()) {
-        e2.pathPosition(this.movement_accum);
+      this.entities.forEach((e) => {
+        if (!e.atEnd()) {
+          e.pathPosition(this.movement_accum);
+        }
+      });
+
+      if (this.entities.every((e) => e.atEnd())) {
+        this.movement.stop();
       }
     });
 
@@ -31,8 +36,9 @@ class IceMagic {
     this.startButton.on("pointerdown", () => {
       console.log("start");
       this.movement_accum = 0;
-      e1.pathPosition(0);
-      e2.pathPosition(0);
+      this.entities.forEach((e) => {
+        e.pathPosition(0);
+      });
       this.movement.start();
     });
     this.stage.addChild(this.startButton);

@@ -1,9 +1,8 @@
 class Entity {
   constructor(x, y, stage, freq) {
     this.circle = new PIXI.Graphics().circle(0, 0, 25).fill(0x454545);
+    stage.addChild(this.circle);
     this.circlePosition(x, y);
-    this.stage = stage;
-    this.stage.addChild(this.circle);
     this.path = new Path(stage);
     this.ticker = new IntervalTicker(freq);
     this.selected = false;
@@ -44,8 +43,10 @@ class Entity {
   }
 
   pathPosition(t) {
-    this.circle.x = this.path.position(t).x;
-    this.circle.y = this.path.position(t).y;
+    if (this.path.points.length > 0) {
+      this.circle.x = this.path.position(t).x;
+      this.circle.y = this.path.position(t).y;
+    }
   }
 
   atEnd() {
