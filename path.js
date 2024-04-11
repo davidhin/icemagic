@@ -4,20 +4,17 @@ class Path {
     this.points = [];
     this.curve = new PIXI.Graphics();
     this.stage.addChild(this.curve);
-    this.tension = 1.5;
-  }
-
-  drawPoint(x, y, color) {
-    let point = new PIXI.Graphics().circle(0, 0, 5).fill(color);
-    point.x = x;
-    point.y = y;
-    this.stage.addChild(point);
-    return point;
+    this.tension = 1.3;
+    this.color = "red";
   }
 
   addPoint(x, y) {
-    let point = this.drawPoint(x, y, "red");
+    let point = new PIXI.Graphics().circle(0, 0, 5).fill(this.color);
+    point.x = x;
+    point.y = y;
+    this.stage.addChild(point);
     this.points.push(point);
+    this.drawCurve();
   }
 
   drawCurve() {

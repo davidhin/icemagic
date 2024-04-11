@@ -9,7 +9,7 @@ class Entity {
 
     this.frequency = 0.5;
     this.smoothness = 0.0125;
-    this.speed = 0.5;
+    this.speed = 1;
 
     this.ticker = new IntervalTicker(this.frequency);
     this.movement = new IntervalTicker(this.smoothness);
@@ -21,7 +21,6 @@ class Entity {
     this.ticker.add(() => {
       if (this.selected == true) {
         this.path.addPoint(this.circle.x, this.circle.y);
-        this.path.drawCurve();
       }
     });
 
