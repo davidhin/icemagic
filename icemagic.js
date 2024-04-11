@@ -3,6 +3,12 @@ class IceMagic {
     this.stage = app.stage;
     this.stage.hitArea = app.screen;
 
+    // UI Element Settings
+    this.stageHeight = app.screen.height;
+    this.stageWidth = app.screen.width;
+    this.sliderWidth = this.stageWidth * 0.8;
+
+    // Path Travelling Settings
     this.frequency = 0.5;
     this.smoothness = 0.0125;
     this.speed = 1;
@@ -44,6 +50,11 @@ class IceMagic {
     });
     this.stage.addChild(this.startButton);
 
-    new Slider(200, 200, 500, this.stage);
+    new Slider(
+      (this.stageWidth - this.sliderWidth) / 2,
+      this.stageHeight * 0.9,
+      this.sliderWidth,
+      this.stage
+    );
   }
 }
