@@ -79,7 +79,7 @@ class IceMagic {
   }
 
   updatePathPoints(p) {
-    this.pathPoints = Math.max(this.pathPoints, p);
+    this.pathPoints = Math.max(this.pathPoints, p - 1);
     console.log(this.pathPoints);
   }
 }
