@@ -1,16 +1,20 @@
 class Path {
   constructor(container, eventManager) {
+    this.eventManager = eventManager;
+    this.eventManager.subscribe("deselect", () => (this.selected = false));
+
     this.container = container;
     this.points = [];
     this.curve = new PIXI.Graphics();
     this.container.addChild(this.curve);
     this.tension = 1.3;
-    this.color = "red";
+    this.color = 0x2a9d8f;
     this.eventManager = eventManager;
+    this.selected = false;
   }
 
   addPoint(x, y) {
-    let point = new PIXI.Graphics().circle(0, 0, 5).fill(this.color);
+    let point = new PIXI.Graphics().circle(0, 0, 15).fill(this.color);
     point.x = x;
     point.y = y;
     this.container.addChild(point);
@@ -64,7 +68,7 @@ class Path {
       const { c1x, c1y, c2x, c2y } = this.controlPoints(p0, p1, p2, p3);
       this.curve.bezierCurveTo(c1x, c1y, c2x, c2y, p2.x, p2.y);
     }
-    this.curve.stroke({ color: "#ffffff" });
+    this.curve.stroke({ color: "#ffffff", width: 1, alpha: 0.5 });
   }
 
   position(step) {

@@ -1,12 +1,16 @@
 class Entity {
   constructor(x, y, stage, pathTime, eventManager) {
+    this.eventManager = eventManager;
+    this.eventManager.subscribe("deselect", this.deselect.bind(this));
+
     this.circle = new PIXI.Graphics()
       .circle(0, 0, 25)
-      .fill(0x454545)
+      .fill(0xffffff)
       .on("pointerdown", this.pointerDown.bind(this))
       .on("pointerup", this.pointerUp.bind(this))
       .on("pointerupoutside", this.pointerUp.bind(this))
       .on("globalpointermove", this.pointerMove.bind(this));
+    this.circle.tint = "0xe9c46a";
     this.circle.eventMode = "static";
     this.circlePosition(x, y);
     stage.addChild(this.circle);
@@ -16,6 +20,15 @@ class Entity {
     this.accumulator = 0;
     this.ticker = new PIXI.Ticker().add((t) => this.addPoint(t));
     this.selected = false;
+  }
+
+  deselect() {
+    this.circle.tint = 0xe9c46a;
+  }
+
+  select() {
+    this.circle.tint = 0xe76f51;
+    this.selected = true;
   }
 
   addPoint(t) {
@@ -28,8 +41,11 @@ class Entity {
     }
   }
 
-  pointerDown() {
-    this.selected = true;
+  pointerDown(e) {
+    e.stopPropagation();
+    this.eventManager.notify("deselect");
+    this.select();
+    this.path.selected = true;
     this.ticker.start();
   }
 

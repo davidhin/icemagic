@@ -17,6 +17,10 @@ class IceMagic {
     // Initialize eventManager
     this.eventManager = new EventManager();
     this.eventManager.subscribe("increment", this.updatePathPoints.bind(this));
+    this.stage.eventMode = "static";
+    this.stage.on("pointerdown", () => {
+      this.eventManager.notify("deselect");
+    });
 
     // Initialize entities
     this.entities = [];
@@ -51,7 +55,7 @@ class IceMagic {
 
     this.startButton = new PIXI.Graphics()
       .circle(this.stageWidth / 2, this.stageHeight * 0.94, 20)
-      .fill(0x8bb0ac);
+      .fill(0xe76f51);
     this.startButton.eventMode = "static";
     this.startButton.on("pointerdown", () => {
       console.log("start");

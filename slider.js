@@ -6,11 +6,11 @@ class Slider {
 
     this.slider = new PIXI.Graphics()
       .rect(0, 0, this.width, 4)
-      .fill({ color: 0x272d37 });
+      .fill({ color: 0x2a9d8f });
     this.slider.x = x;
     this.slider.y = y;
 
-    this.handle = new PIXI.Graphics().circle(0, 0, 8).fill({ color: 0xffffff });
+    this.handle = new PIXI.Graphics().circle(0, 0, 8).fill({ color: 0xf4a261 });
     this.handle.y = this.slider.height / 2;
     this.handle.eventMode = "static";
     this.handle.cursor = "pointer";
