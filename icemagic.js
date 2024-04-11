@@ -28,7 +28,10 @@ class IceMagic {
       (this.stageWidth - this.sliderWidth) / 2,
       this.stageHeight * 0.9,
       this.sliderWidth,
-      this.stage
+      this.stage,
+      (t) => {
+        console.log(t);
+      }
     );
 
     this.movement.add(() => {

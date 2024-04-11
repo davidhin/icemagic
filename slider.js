@@ -1,7 +1,8 @@
 class Slider {
-  constructor(x, y, width, stage) {
+  constructor(x, y, width, stage, callback) {
     this.width = width;
     this.stage = stage;
+    this.callback = callback;
 
     this.slider = new PIXI.Graphics()
       .rect(0, 0, this.width, 4)
@@ -36,11 +37,11 @@ class Slider {
   }
 
   onDrag(e) {
-    const halfHandleWidth = this.handle.width / 2;
-
     this.handle.x = Math.max(
-      halfHandleWidth,
-      Math.min(this.slider.toLocal(e.global).x, this.width - halfHandleWidth)
+      0,
+      Math.min(this.slider.toLocal(e.global).x, this.width)
     );
+
+    this.callback(this.handle.x / this.width);
   }
 }
