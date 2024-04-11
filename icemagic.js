@@ -52,7 +52,9 @@ class IceMagic {
       }
     });
 
-    this.startButton = new PIXI.Graphics().circle(300, 300, 25).fill(0x8bb0ac);
+    this.startButton = new PIXI.Graphics()
+      .circle(this.stageWidth / 2, this.stageHeight * 0.94, 20)
+      .fill(0x8bb0ac);
     this.startButton.eventMode = "static";
     this.startButton.on("pointerdown", () => {
       console.log("start");
