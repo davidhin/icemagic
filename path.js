@@ -17,6 +17,14 @@ class Path {
     this.drawCurve();
   }
 
+  controlPoints(p0, p1, p2, p3) {
+    const c1x = p1.x + ((p2.x - p0.x) * this.tension) / 6;
+    const c1y = p1.y + ((p2.y - p0.y) * this.tension) / 6;
+    const c2x = p2.x - ((p3.x - p1.x) * this.tension) / 6;
+    const c2y = p2.y - ((p3.y - p1.y) * this.tension) / 6;
+    return { c1x, c1y, c2x, c2y };
+  }
+
   drawCurve() {
     this.curve.clear();
     this.curve.moveTo(this.points[0].x, this.points[0].y);
@@ -26,15 +34,8 @@ class Path {
       const p1 = this.points[i];
       const p2 = this.points[i + 1];
       const p3 = i !== this.points.length - 2 ? this.points[i + 2] : p2;
-
-      // Calculate control points for a smoother transition
-      const cp1x = p1.x + ((p2.x - p0.x) * this.tension) / 6;
-      const cp1y = p1.y + ((p2.y - p0.y) * this.tension) / 6;
-      const cp2x = p2.x - ((p3.x - p1.x) * this.tension) / 6;
-      const cp2y = p2.y - ((p3.y - p1.y) * this.tension) / 6;
-
-      // Draw the Bézier curve using the calculated control points
-      this.curve.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+      const { c1x, c1y, c2x, c2y } = this.controlPoints(p0, p1, p2, p3);
+      this.curve.bezierCurveTo(c1x, c1y, c2x, c2y, p2.x, p2.y);
     }
     this.curve.stroke({ color: "#ffffff" });
   }
@@ -44,11 +45,8 @@ class Path {
       return { x: 0, y: 0 };
     }
 
-    // Adjust for the scale of step being between 0 and N
     let numSegments = this.points.length - 1;
-    let segmentIndex = Math.floor(step); // Direct mapping of step to index
-
-    // Special case handling when step is exactly at the last point
+    let segmentIndex = Math.floor(step);
     if (segmentIndex >= numSegments) {
       return {
         x: this.points[this.points.length - 1].x,
@@ -56,13 +54,9 @@ class Path {
       };
     }
 
-    // Calculate the local step for interpolation within the current segment
     let localStep = step - segmentIndex;
     let startPoint = this.points[segmentIndex];
     let endPoint = this.points[segmentIndex + 1];
-
-    // Calculate the position along the Bezier curve
-    let t = localStep; // Assuming localStep is normalized between 0 and 1 for Bezier curves
     let p0 = segmentIndex > 0 ? this.points[segmentIndex - 1] : this.points[0];
     let p1 = startPoint;
     let p2 = endPoint;
@@ -71,22 +65,18 @@ class Path {
         ? this.points[segmentIndex + 2]
         : p2;
 
-    // Calculate control points for a smoother transition
-    let cp1x = p1.x + ((p2.x - p0.x) * this.tension) / 6;
-    let cp1y = p1.y + ((p2.y - p0.y) * this.tension) / 6;
-    let cp2x = p2.x - ((p3.x - p1.x) * this.tension) / 6;
-    let cp2y = p2.y - ((p3.y - p1.y) * this.tension) / 6;
+    const { c1x, c1y, c2x, c2y } = this.controlPoints(p0, p1, p2, p3);
 
-    // Calculate the position on the Bezier curve using the calculated control points
+    let t = localStep;
     let px =
       (1 - t) ** 3 * p1.x +
-      3 * (1 - t) ** 2 * t * cp1x +
-      3 * (1 - t) * t ** 2 * cp2x +
+      3 * (1 - t) ** 2 * t * c1x +
+      3 * (1 - t) * t ** 2 * c2x +
       t ** 3 * p2.x;
     let py =
       (1 - t) ** 3 * p1.y +
-      3 * (1 - t) ** 2 * t * cp1y +
-      3 * (1 - t) * t ** 2 * cp2y +
+      3 * (1 - t) ** 2 * t * c1y +
+      3 * (1 - t) * t ** 2 * c2y +
       t ** 3 * p2.y;
 
     return { x: px, y: py };
