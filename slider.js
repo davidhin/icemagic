@@ -11,7 +11,6 @@ class Slider {
 
     this.handle = new PIXI.Graphics().circle(0, 0, 8).fill({ color: 0xffffff });
     this.handle.y = this.slider.height / 2;
-    this.handle.x = this.width / 2;
     this.handle.eventMode = "static";
     this.handle.cursor = "pointer";
 
@@ -38,13 +37,10 @@ class Slider {
 
   onDrag(e) {
     const halfHandleWidth = this.handle.width / 2;
-    // Set handle y-position to match pointer, clamped to (4, screen.height - 4).
 
     this.handle.x = Math.max(
       halfHandleWidth,
       Math.min(this.slider.toLocal(e.global).x, this.width - halfHandleWidth)
     );
-    // Normalize handle position between -1 and 1.
-    const t = 2 * (this.handle.x / this.width - 0.5);
   }
 }
