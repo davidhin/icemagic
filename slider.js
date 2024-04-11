@@ -10,7 +10,9 @@ class Slider {
     this.slider.x = x;
     this.slider.y = y;
 
-    this.handle = new PIXI.Graphics().circle(0, 0, 8).fill({ color: 0xf4a261 });
+    this.handle = new PIXI.Graphics()
+      .circle(0, 0, 20)
+      .fill({ color: 0xf4a261 });
     this.handle.y = this.slider.height / 2;
     this.handle.eventMode = "static";
     this.handle.cursor = "pointer";
@@ -26,6 +28,7 @@ class Slider {
 
   // Listen to pointermove on stage once handle is pressed.
   onDragStart() {
+    e.stopPropagation();
     this.stage.eventMode = "static";
     this.stage.addEventListener("pointermove", (e) => this.onDrag(e));
   }
