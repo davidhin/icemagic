@@ -30,7 +30,14 @@ class IceMagic {
       this.sliderWidth,
       this.stage,
       (t) => {
-        console.log(t);
+        let norm_t =
+          t * Math.max(...this.entities.map((e) => e.path.points.length));
+
+        this.entities.forEach((e) => {
+          e.pathPosition(norm_t);
+        });
+
+        console.log(norm_t);
       }
     );
 
