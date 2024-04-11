@@ -10,11 +10,9 @@ class IceMagic {
     this.pathPoints = 0;
 
     // Path Travelling Settings
-    this.frequency = 0.5;
-    this.smoothness = 0.0125;
-    this.speed = 1;
-
-    this.movement = new IntervalTicker(this.smoothness);
+    this.pathTime = 1000; // Milliseconds to travel between 2 points
+    this.pathSpeed = 1 / this.pathTime; // Distance between 2 points is 1
+    this.movement = new PIXI.Ticker();
 
     // Initialize eventManager
     this.eventManager = new EventManager();
@@ -38,9 +36,8 @@ class IceMagic {
       this.moveEntities.bind(this)
     );
 
-    this.movement.add(() => {
-      console.log("moving...");
-      this.movement_accum += (this.smoothness / this.frequency) * this.speed;
+    this.movement.add((ticker) => {
+      this.movement_accum += ticker.deltaMS * this.pathSpeed;
       this.entities.forEach((e) => {
         if (!e.atEnd()) {
           e.pathPosition(this.movement_accum);
@@ -68,7 +65,7 @@ class IceMagic {
   }
 
   createEntity(x, y) {
-    return new Entity(x, y, this.stage, this.frequency, this.eventManager);
+    return new Entity(x, y, this.stage, this.pathTime, this.eventManager);
   }
 
   moveEntities(t) {

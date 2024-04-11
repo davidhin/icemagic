@@ -1,5 +1,5 @@
 class Entity {
-  constructor(x, y, stage, freq, eventManager) {
+  constructor(x, y, stage, pathTime, eventManager) {
     this.circle = new PIXI.Graphics()
       .circle(0, 0, 25)
       .fill(0x454545)
@@ -12,14 +12,19 @@ class Entity {
     stage.addChild(this.circle);
 
     this.path = new Path(stage, eventManager);
-    this.ticker = new IntervalTicker(freq);
+    this.pathTime = pathTime;
+    this.accumulator = 0;
+    this.ticker = new PIXI.Ticker().add((t) => this.addPoint(t));
     this.selected = false;
-    this.ticker.add(this.addPoint.bind(this));
   }
 
-  addPoint() {
+  addPoint(t) {
     if (this.selected == true) {
-      this.path.addPoint(this.circle.x, this.circle.y);
+      this.accumulator += t.deltaMS * (1 / this.pathTime);
+      if (this.accumulator >= 1) {
+        this.accumulator = 0;
+        this.path.addPoint(this.circle.x, this.circle.y);
+      }
     }
   }
 
