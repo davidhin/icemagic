@@ -14,9 +14,34 @@ class Path {
     point.x = x;
     point.y = y;
     this.container.addChild(point);
+
+    point.eventMode = "static";
+    point
+      .on("pointerdown", this.pointerDown.bind(this))
+      .on("pointerup", this.pointerUp.bind(this))
+      .on("pointerupoutside", this.pointerUp.bind(this))
+      .on("globalpointermove", this.pointerMove.bind(this));
+
     this.points.push(point);
     this.eventManager.notify("increment", this.points.length);
     this.drawCurve();
+  }
+
+  // Point methods
+  pointerDown(e) {
+    e.currentTarget.selected = true;
+  }
+
+  pointerUp(e) {
+    e.currentTarget.selected = false;
+  }
+
+  pointerMove(e) {
+    if (e.currentTarget.selected == true) {
+      e.currentTarget.x = e.global.x;
+      e.currentTarget.y = e.global.y;
+      this.drawCurve();
+    }
   }
 
   controlPoints(p0, p1, p2, p3) {
