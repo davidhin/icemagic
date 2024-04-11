@@ -1,9 +1,9 @@
 class Path {
-  constructor(stage) {
-    this.stage = stage;
+  constructor(container) {
+    this.container = container;
     this.points = [];
     this.curve = new PIXI.Graphics();
-    this.stage.addChild(this.curve);
+    this.container.addChild(this.curve);
     this.tension = 1.3;
     this.color = "red";
   }
@@ -12,7 +12,7 @@ class Path {
     let point = new PIXI.Graphics().circle(0, 0, 5).fill(this.color);
     point.x = x;
     point.y = y;
-    this.stage.addChild(point);
+    this.container.addChild(point);
     this.points.push(point);
     this.drawCurve();
   }

@@ -24,6 +24,13 @@ class IceMagic {
   }
 
   init() {
+    this.slider = new Slider(
+      (this.stageWidth - this.sliderWidth) / 2,
+      this.stageHeight * 0.9,
+      this.sliderWidth,
+      this.stage
+    );
+
     this.movement.add(() => {
       console.log("moving...");
       this.movement_accum += (this.smoothness / this.frequency) * this.speed;
@@ -49,12 +56,5 @@ class IceMagic {
       this.movement.start();
     });
     this.stage.addChild(this.startButton);
-
-    new Slider(
-      (this.stageWidth - this.sliderWidth) / 2,
-      this.stageHeight * 0.9,
-      this.sliderWidth,
-      this.stage
-    );
   }
 }
