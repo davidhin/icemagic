@@ -8,7 +8,7 @@ class IceMagic {
     this.stageHeight = app.screen.height;
     this.stageWidth = app.screen.width;
     this.sliderWidth = this.stageWidth * 0.8;
-    this.numPathPoints = 0;
+    this.pathPoints = 0;
 
     // Path Travelling Settings
     this.frequency = 0.5;
@@ -28,10 +28,7 @@ class IceMagic {
       new Entity(100, 300, this.stage, this.frequency, this.eventManager)
     );
 
-    this.eventManager.subscribe("increment", (p) => {
-      this.numPathPoints = Math.max(this.numPathPoints, p);
-      console.log(this.numPathPoints);
-    });
+    this.eventManager.subscribe("increment", this.updatePathPoints.bind(this));
 
     this.init();
   }
@@ -42,14 +39,7 @@ class IceMagic {
       this.stageHeight * 0.9,
       this.sliderWidth,
       this.stage,
-      (t) => {
-        let norm_t = t * this.numPathPoints;
-        this.entities.forEach((e) => {
-          e.pathPosition(norm_t);
-        });
-
-        console.log(norm_t);
-      }
+      this.moveEntities.bind(this)
     );
 
     this.movement.add(() => {
@@ -77,5 +67,19 @@ class IceMagic {
       this.movement.start();
     });
     this.stage.addChild(this.startButton);
+  }
+
+  moveEntities(t) {
+    let norm_t = t * this.pathPoints;
+    this.entities.forEach((e) => {
+      e.pathPosition(norm_t);
+    });
+
+    console.log(norm_t);
+  }
+
+  updatePathPoints(p) {
+    this.pathPoints = Math.max(this.pathPoints, p);
+    console.log(this.pathPoints);
   }
 }

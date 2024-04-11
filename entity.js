@@ -1,40 +1,42 @@
 class Entity {
   constructor(x, y, stage, freq, eventManager) {
-    this.circle = new PIXI.Graphics().circle(0, 0, 25).fill(0x454545);
-    stage.addChild(this.circle);
+    this.circle = new PIXI.Graphics()
+      .circle(0, 0, 25)
+      .fill(0x454545)
+      .on("pointerdown", this.pointerDown.bind(this))
+      .on("pointerup", this.pointerUp.bind(this))
+      .on("pointerupoutside", this.pointerUp.bind(this))
+      .on("globalpointermove", this.pointerMove.bind(this));
+    this.circle.eventMode = "static";
     this.circlePosition(x, y);
+    stage.addChild(this.circle);
+
     this.path = new Path(stage, eventManager);
     this.ticker = new IntervalTicker(freq);
     this.selected = false;
-    this.init();
+    this.ticker.add(this.addPoint.bind(this));
   }
 
-  init() {
-    this.ticker.add(() => {
-      if (this.selected == true) {
-        this.path.addPoint(this.circle.x, this.circle.y);
-      }
-    });
+  addPoint() {
+    if (this.selected == true) {
+      this.path.addPoint(this.circle.x, this.circle.y);
+    }
+  }
 
-    this.circle.on("pointerdown", () => {
-      this.selected = true;
-      this.ticker.start();
-    });
+  pointerDown() {
+    this.selected = true;
+    this.ticker.start();
+  }
 
-    ["pointerup", "pointerupoutside"].forEach((event_type) => {
-      this.circle.on(event_type, () => {
-        this.selected = false;
-        this.ticker.stop();
-      });
-    });
+  pointerUp() {
+    this.selected = false;
+    this.ticker.stop();
+  }
 
-    this.circle.on("globalpointermove", (event) => {
-      if (this.selected == true) {
-        this.circlePosition(event.global.x, event.global.y);
-      }
-    });
-
-    this.circle.eventMode = "static";
+  pointerMove(e) {
+    if (this.selected == true) {
+      this.circlePosition(e.global.x, e.global.y);
+    }
   }
 
   circlePosition(x, y) {
