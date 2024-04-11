@@ -1,18 +1,11 @@
 class Entity {
-  constructor(x, y, stage) {
+  constructor(x, y, stage, freq) {
     this.circle = new PIXI.Graphics().circle(0, 0, 25).fill(0x454545);
-    this.circle.x = x;
-    this.circle.y = y;
+    this.circlePosition(x, y);
     this.stage = stage;
     this.stage.addChild(this.circle);
     this.path = new Path(stage);
-
-    this.frequency = 0.5;
-    this.smoothness = 0.0125;
-    this.speed = 1;
-
-    this.ticker = new IntervalTicker(this.frequency);
-    this.movement = new IntervalTicker(this.smoothness);
+    this.ticker = new IntervalTicker(freq);
     this.selected = false;
     this.init();
   }
@@ -24,23 +17,9 @@ class Entity {
       }
     });
 
-    this.movement.add((ticker) => {
-      this.movement_accum += (this.smoothness / this.frequency) * this.speed;
-      this.circle.x = this.path.position(this.movement_accum).x;
-      this.circle.y = this.path.position(this.movement_accum).y;
-      if (this.movement_accum > this.path.lastPosition()) {
-        ticker.stop();
-      }
-    });
-
     this.circle.on("pointerdown", () => {
       this.selected = true;
       this.ticker.start();
-    });
-
-    this.circle.on("rightclick", () => {
-      this.movement_accum = 0;
-      this.movement.start();
     });
 
     ["pointerup", "pointerupoutside"].forEach((event_type) => {
@@ -52,11 +31,31 @@ class Entity {
 
     this.circle.on("globalpointermove", (event) => {
       if (this.selected == true) {
-        this.circle.x = event.global.x;
-        this.circle.y = event.global.y;
+        this.circlePosition(event.global.x, event.global.y);
       }
     });
 
     this.circle.eventMode = "static";
+  }
+
+  circlePosition(x, y) {
+    this.circle.x = x;
+    this.circle.y = y;
+  }
+
+  pathPosition(t) {
+    this.circle.x = this.path.position(t).x;
+    this.circle.y = this.path.position(t).y;
+  }
+
+  atEnd() {
+    if (this.path.points.length == 0) {
+      return true;
+    }
+
+    return (
+      this.circle.x == this.path.lastPoint().x &&
+      this.circle.y == this.path.lastPoint().y
+    );
   }
 }

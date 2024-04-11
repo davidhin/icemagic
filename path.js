@@ -82,7 +82,7 @@ class Path {
     return { x: px, y: py };
   }
 
-  lastPosition() {
-    return this.points.length - 1;
+  lastPoint() {
+    return this.points[this.points.length - 1];
   }
 }
