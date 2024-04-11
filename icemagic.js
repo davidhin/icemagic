@@ -25,7 +25,9 @@ class IceMagic {
     });
 
     this.stage.on("pointerup", () => {
-      this.createEntityTicker.stop();
+      if (this.createEntityTicker !== undefined) {
+        this.createEntityTicker.stop();
+      }
     });
 
     // Initialize entities list
