@@ -1,6 +1,7 @@
 class IceMagic {
   constructor(app) {
     this.stage = app.stage;
+    this.stage.hitArea = app.screen;
 
     this.frequency = 0.5;
     this.smoothness = 0.0125;
@@ -42,5 +43,7 @@ class IceMagic {
       this.movement.start();
     });
     this.stage.addChild(this.startButton);
+
+    new Slider(200, 200, 500, this.stage);
   }
 }
