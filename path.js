@@ -4,15 +4,20 @@ class Path {
     this.points = [];
     this.curve = new PIXI.Graphics();
     this.stage.addChild(this.curve);
+    this.tension = 1.5;
+  }
+
+  drawPoint(x, y, color) {
+    let point = new PIXI.Graphics().circle(0, 0, 5).fill(color);
+    point.x = x;
+    point.y = y;
+    this.stage.addChild(point);
+    return point;
   }
 
   addPoint(x, y) {
-    let point = new PIXI.Graphics().circle(0, 0, 5).fill("red");
-    point.x = x;
-    point.y = y;
+    let point = this.drawPoint(x, y, "red");
     this.points.push(point);
-    this.stage.addChild(point);
-    this.drawCurve();
   }
 
   drawCurve() {
@@ -26,11 +31,10 @@ class Path {
       const p3 = i !== this.points.length - 2 ? this.points[i + 2] : p2;
 
       // Calculate control points for a smoother transition
-      const cp1x = p1.x + (p2.x - p0.x) / 6;
-      const cp1y = p1.y + (p2.y - p0.y) / 6;
-
-      const cp2x = p2.x - (p3.x - p1.x) / 6;
-      const cp2y = p2.y - (p3.y - p1.y) / 6;
+      const cp1x = p1.x + ((p2.x - p0.x) * this.tension) / 6;
+      const cp1y = p1.y + ((p2.y - p0.y) * this.tension) / 6;
+      const cp2x = p2.x - ((p3.x - p1.x) * this.tension) / 6;
+      const cp2y = p2.y - ((p3.y - p1.y) * this.tension) / 6;
 
       // Draw the Bézier curve using the calculated control points
       this.curve.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
@@ -71,11 +75,10 @@ class Path {
         : p2;
 
     // Calculate control points for a smoother transition
-    let cp1x = p1.x + (p2.x - p0.x) / 6;
-    let cp1y = p1.y + (p2.y - p0.y) / 6;
-
-    let cp2x = p2.x - (p3.x - p1.x) / 6;
-    let cp2y = p2.y - (p3.y - p1.y) / 6;
+    let cp1x = p1.x + ((p2.x - p0.x) * this.tension) / 6;
+    let cp1y = p1.y + ((p2.y - p0.y) * this.tension) / 6;
+    let cp2x = p2.x - ((p3.x - p1.x) * this.tension) / 6;
+    let cp2y = p2.y - ((p3.y - p1.y) * this.tension) / 6;
 
     // Calculate the position on the Bezier curve using the calculated control points
     let px =

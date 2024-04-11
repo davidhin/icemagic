@@ -21,6 +21,7 @@ class Entity {
     this.ticker.add(() => {
       if (this.selected == true) {
         this.path.addPoint(this.circle.x, this.circle.y);
+        this.path.drawCurve();
       }
     });
 
