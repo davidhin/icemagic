@@ -18,16 +18,18 @@ class IceMagic {
     this.eventManager = new EventManager();
     this.eventManager.subscribe("increment", this.updatePathPoints.bind(this));
     this.stage.eventMode = "static";
-    this.stage.on("pointerdown", () => {
+
+    this.stage.on("pointerdown", (e) => {
       this.eventManager.notify("deselect");
+      this.createEntityTicker = this.startCreateEntity(e);
     });
 
-    // Initialize entities
-    this.entities = [];
-    this.entities.push(this.createEntity(100, 100));
-    this.entities.push(this.createEntity(100, 200));
-    this.entities.push(this.createEntity(100, 300));
+    this.stage.on("pointerup", () => {
+      this.createEntityTicker.stop();
+    });
 
+    // Initialize entities list
+    this.entities = [];
     this.init();
   }
 
@@ -66,6 +68,21 @@ class IceMagic {
       this.movement.start();
     });
     this.stage.addChild(this.startButton);
+  }
+
+  startCreateEntity(e) {
+    let ticker = new PIXI.Ticker();
+    let accumulator = 0;
+    ticker.add((t) => {
+      accumulator += t.deltaMS;
+      console.log(accumulator);
+      if (accumulator >= 500) {
+        this.entities.push(this.createEntity(e.global.x, e.global.y));
+        t.stop();
+      }
+    });
+    ticker.start();
+    return ticker;
   }
 
   createEntity(x, y) {

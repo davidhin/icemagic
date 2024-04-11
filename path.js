@@ -33,6 +33,7 @@ class Path {
 
   // Point methods
   pointerDown(e) {
+    e.stopPropagation();
     e.currentTarget.selected = true;
   }
 
