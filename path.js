@@ -1,11 +1,12 @@
 class Path {
-  constructor(container) {
+  constructor(container, eventManager) {
     this.container = container;
     this.points = [];
     this.curve = new PIXI.Graphics();
     this.container.addChild(this.curve);
     this.tension = 1.3;
     this.color = "red";
+    this.eventManager = eventManager;
   }
 
   addPoint(x, y) {
@@ -14,6 +15,7 @@ class Path {
     point.y = y;
     this.container.addChild(point);
     this.points.push(point);
+    this.eventManager.notify("increment", this.points.length);
     this.drawCurve();
   }
 

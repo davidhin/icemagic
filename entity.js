@@ -1,9 +1,9 @@
 class Entity {
-  constructor(x, y, stage, freq) {
+  constructor(x, y, stage, freq, eventManager) {
     this.circle = new PIXI.Graphics().circle(0, 0, 25).fill(0x454545);
     stage.addChild(this.circle);
     this.circlePosition(x, y);
-    this.path = new Path(stage);
+    this.path = new Path(stage, eventManager);
     this.ticker = new IntervalTicker(freq);
     this.selected = false;
     this.init();
