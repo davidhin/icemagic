@@ -10,6 +10,7 @@ class Entity {
       .on("pointerup", this.pointerUp.bind(this))
       .on("pointerupoutside", this.pointerUp.bind(this))
       .on("globalpointermove", this.pointerMove.bind(this));
+    this.circle.zIndex = 1;
     this.circle.tint = "0xe9c46a";
     this.circle.eventMode = "static";
     this.circlePosition(x, y);
