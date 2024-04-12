@@ -28,13 +28,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "18" # Recommended to use an LTS version
+          node-version: "18"
 
       - name: Install dependencies
         run: npm install
 
       - name: Build project
-        run: npm run build  # Assuming you have a "build" script in package.json
+        run: npm run build
 
       - name: Deploy
         run: npx gh-pages -d dist
