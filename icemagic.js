@@ -17,16 +17,6 @@ class IceMagic {
     // Initialize eventManager
     this.eventManager = new EventManager();
     this.eventManager.subscribe("increment", this.updatePathPoints.bind(this));
-    this.stage.eventMode = "static";
-
-    this.stage.on("pointerdown", (e) => {
-      this.eventManager.notify("deselect");
-      this.createEntityTicker = this.startCreateEntity(e);
-    });
-
-    this.stage.on("pointerup", () => {
-      this.createEntityTicker.stop();
-    });
 
     // Initialize entities list
     this.entities = [];
@@ -68,21 +58,18 @@ class IceMagic {
       this.movement.start();
     });
     this.stage.addChild(this.startButton);
-  }
 
-  startCreateEntity(e) {
-    let ticker = new PIXI.Ticker();
-    let accumulator = 0;
-    ticker.add((t) => {
-      accumulator += t.deltaMS;
-      console.log(accumulator);
-      if (accumulator >= 500) {
-        this.entities.push(this.createEntity(e.global.x, e.global.y));
-        t.stop();
-      }
+    this.addEntityButton = new PIXI.Graphics()
+      .circle(this.stageWidth / 2.5, this.stageHeight * 0.94, 20)
+      .fill(0xe76f51);
+    this.addEntityButton.eventMode = "static";
+    this.addEntityButton.on("pointerdown", () => {
+      this.entities.push(
+        this.createEntity(this.stageWidth / 2, this.stageHeight / 2)
+      );
     });
-    ticker.start();
-    return ticker;
+
+    this.stage.addChild(this.addEntityButton);
   }
 
   createEntity(x, y) {
