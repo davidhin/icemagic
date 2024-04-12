@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "build": "webpack",
-    "start": "webpack serve"
+  "homepage": "http://davidhin.github.io/icemagic",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidhin/icemagic.git"
   },
-  "author": "",
+  "scripts": {
+    "start": "webpack server",
+    "build": "webpack",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "author": "David Hin",
   "license": "ISC",
   "dependencies": {
     "pixi.js": "^8.1.0"
