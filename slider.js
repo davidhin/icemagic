@@ -28,7 +28,6 @@ class Slider {
 
   // Listen to pointermove on stage once handle is pressed.
   onDragStart() {
-    e.stopPropagation();
     this.stage.eventMode = "static";
     this.stage.addEventListener("pointermove", (e) => this.onDrag(e));
   }
