@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="pixi.min.js"></script>
+    <script src="eventManager.js"></script>
+    <script src="entity.js"></script>
+    <script src="path.js"></script>
+    <script src="icemagic.js"></script>
+    <script src="slider.js"></script>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      const app = new PIXI.Application();
+      await app.init({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        backgroundColor: 0x264653,
+        antialias: true,
+      });
+      document.body.appendChild(app.canvas);
+
+      new IceMagic(app);
+    </script>
+  </body>
+</html>
