@@ -18,23 +18,28 @@ class Slider {
     this.handle.cursor = "pointer";
 
     this.handle
-      .on("pointerdown", this.pointerDown.bind(this))
-      .on("pointerup", () => (this.selected = false))
-      .on("pointerupoutside", () => (this.selected = false))
-      .on("globalpointermove", this.onDrag.bind(this));
+      .on("pointerdown", (e) => this.onDragStart(e))
+      .on("pointerup", (e) => this.onDragEnd(e))
+      .on("pointerupoutside", (e) => this.onDragEnd(e));
 
     this.stage.addChild(this.slider);
     this.slider.addChild(this.handle);
   }
 
-  pointerDown(e) {
+  // Listen to pointermove on stage once handle is pressed.
+  onDragStart() {
     e.stopPropagation();
-    this.selected = true;
+    this.stage.eventMode = "static";
+    this.stage.addEventListener("pointermove", (e) => this.onDrag(e));
+  }
+
+  // Stop dragging feedback once the handle is released.
+  onDragEnd(e) {
+    this.stage.eventMode = "auto";
+    this.stage.removeEventListener("pointermove", (e) => this.onDrag(e));
   }
 
   onDrag(e) {
-    if (!this.selected) return;
-
     this.handle.x = Math.max(
       0,
       Math.min(this.slider.toLocal(e.global).x, this.width)
