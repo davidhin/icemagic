@@ -49,6 +49,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
+          token: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Download artifact
         uses: actions/download-artifact@v3
