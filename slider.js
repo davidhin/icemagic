@@ -1,18 +1,18 @@
-import { Graphics } from "pixi.js";
-
 class Slider {
   constructor(x, y, width, stage, callback) {
     this.width = width;
     this.stage = stage;
     this.callback = callback;
 
-    this.slider = new Graphics()
+    this.slider = new PIXI.Graphics()
       .rect(0, 0, this.width, 4)
       .fill({ color: 0x2a9d8f });
     this.slider.x = x;
     this.slider.y = y;
 
-    this.handle = new Graphics().circle(0, 0, 20).fill({ color: 0xf4a261 });
+    this.handle = new PIXI.Graphics()
+      .circle(0, 0, 20)
+      .fill({ color: 0xf4a261 });
     this.handle.y = this.slider.height / 2;
     this.handle.eventMode = "static";
     this.handle.cursor = "pointer";

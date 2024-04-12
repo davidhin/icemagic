@@ -1,21 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pixi.js Project</title>
+    <script src="pixi.min.js"></script>
+    <script src="eventManager.js"></script>
+    <script src="entity.js"></script>
+    <script src="path.js"></script>
+    <script src="icemagic.js"></script>
+    <script src="slider.js"></script>
     <style>
       body {
         margin: 0;
-        overflow: hidden;
-      }
-      canvas {
-        width: 100%;
-        height: 100%;
       }
     </style>
   </head>
   <body>
+<<<<<<< HEAD:src/index.html
     <script src="bundle.js"></script>
+=======
+    <script type="module">
+      const app = new PIXI.Application();
+      await app.init({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        backgroundColor: 0x264653,
+        antialias: true,
+      });
+      document.body.appendChild(app.canvas);
+
+      new IceMagic(app);
+    </script>
+>>>>>>> parent of a8179e0 (Restructure):index.html
   </body>
 </html>
