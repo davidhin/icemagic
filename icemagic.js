@@ -60,7 +60,7 @@ class IceMagic {
     this.stage.addChild(this.startButton);
 
     this.addEntityButton = new PIXI.Graphics()
-      .circle(this.stageWidth / 2.5, this.stageHeight * 0.94, 20)
+      .circle(this.stageWidth / 2 - 150, this.stageHeight * 0.94, 20)
       .fill(0xe76f51);
     this.addEntityButton.eventMode = "static";
     this.addEntityButton.on("pointerdown", () => {
@@ -68,8 +68,22 @@ class IceMagic {
         this.createEntity(this.stageWidth / 2, this.stageHeight / 2)
       );
     });
-
     this.stage.addChild(this.addEntityButton);
+
+    this.clearStageButton = new PIXI.Graphics()
+      .circle(this.stageWidth / 2 + 150, this.stageHeight * 0.94, 20)
+      .fill(0xe76f51);
+    this.clearStageButton.eventMode = "static";
+    this.clearStageButton.on("pointerdown", () => {
+      this.entities.forEach((e) => {
+        e.path.points.forEach((p) => {
+          this.stage.removeChild(p);
+        });
+        this.stage.removeChild(e.path.curve);
+        this.stage.removeChild(e.circle);
+      });
+    });
+    this.stage.addChild(this.clearStageButton);
   }
 
   createEntity(x, y) {
